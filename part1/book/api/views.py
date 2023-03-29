@@ -6,12 +6,12 @@ from ..models import Book, Author
 from .serializers import BookSerializer, AuthorSerializer
 
 
-
 class AuthorListCreateApiView(APIView):
 
     def get(self, request):
         author = Author.objects.all()
-        serializer = AuthorSerializer(author, many=True)  # many=True birder fazla queryset gönderince yazılır
+        context = {'request': request}
+        serializer = AuthorSerializer(author, many=True, context=context)  # many=True birder fazla queryset gönderince yazılır
         return Response(serializer.data)
 
     def post(self, request):

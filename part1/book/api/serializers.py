@@ -48,6 +48,7 @@ class BookSerializer(ModelSerializer):
 class AuthorSerializer(serializers.ModelSerializer):
 
     books = BookSerializer(many=True, read_only=True)
+    books = serializers.HyperlinkedRelatedField(many=True, read_only=True, view_name="book-detail")
 
     class Meta:
         model = Author
