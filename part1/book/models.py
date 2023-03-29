@@ -7,6 +7,9 @@ class Author(models.Model):
     last_name = models.CharField(verbose_name="Soyisim", max_length=240)
     biography = models.TextField(verbose_name="Biyografi", max_length=400)
 
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
 
 class Book(models.Model):
     author = models.ForeignKey(to=Author, on_delete=models.CASCADE, related_name="books")

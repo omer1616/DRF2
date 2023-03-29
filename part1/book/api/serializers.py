@@ -1,10 +1,20 @@
-from ..models import Book
-from rest_framework.serializers import ModelSerializer, ValidationError, SerializerMethodField
+from ..models import Book, Author
+from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer, ValidationError
 from django.utils.timezone import now
 
 
+class AuthorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Author
+        fields = "__all__"
+
+
 class BookSerializer(ModelSerializer):
-    days_since_created = SerializerMethodField()
+    days_since_created = serializers.SerializerMethodField()
+    author_name = serializers.SerializerMethodField()
+    # author = serializers.StringRelatedField()
+    # author = AuthorSerializer()
 
     class Meta:
         model = Book
@@ -15,6 +25,9 @@ class BookSerializer(ModelSerializer):
 
     def get_days_since_created(self, obj):
         return (now() - obj.created_date).days
+
+    def get_author_name(self, obj):
+        return f"{obj.author.first_name} {obj.author.last_name}"
 
     def validate(self, attrs):
         if attrs['name'] == attrs['description']:
@@ -30,3 +43,12 @@ class BookSerializer(ModelSerializer):
                 'Fiyat Negatif Değer içeremez'
             )
         return value
+
+
+class AuthorSerializer(serializers.ModelSerializer):
+
+    books = BookSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Author
+        fields = "__all__"

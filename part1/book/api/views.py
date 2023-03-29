@@ -2,8 +2,24 @@ from rest_framework import status
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from ..models import Book
-from .serializers import BookSerializer
+from ..models import Book, Author
+from .serializers import BookSerializer, AuthorSerializer
+
+
+
+class AuthorListCreateApiView(APIView):
+
+    def get(self, request):
+        author = Author.objects.all()
+        serializer = AuthorSerializer(author, many=True)  # many=True birder fazla queryset gönderince yazılır
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = AuthorSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class BookListCreateApiView(APIView):
