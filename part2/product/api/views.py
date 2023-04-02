@@ -7,62 +7,32 @@ from .serializer import CategorySerializer, ProductSerializer
 from rest_framework import generics
 
 
-# class ListCreateCategory(GenericAPIView):
-#     serializer_class = CategorySerializer
-#     queryset = Category.objects.all()
-#
-#     def get(self, request, *args, **kwargs):
-#         instance = self.get_object()
-#         serializer = self.get_serializer(instance)
-#         return Response(serializer.data)
-#
-#     def delete(self, request, *args, **kwargs):
-#         instance = self.get_object()
-#         instance.delete()
-#         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class ListCreateCategory(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
-    serializer_class = CategorySerializer
+class ListCreateCategory(generics.ListCreateAPIView):
     queryset = Category.objects.all()
-
-    # listelemek
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-
-    # yaratmak istiyorum
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
-
-
-class RetrieveUpdateDestroy(mixins.RetrieveModelMixin,
-                            mixins.UpdateModelMixin,
-                            mixins.DestroyModelMixin,
-                            mixins.GenericAPIView):
     serializer_class = CategorySerializer
+
+
+class RetrieveUpdateDestroyCategory(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
-
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
-
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
-    def patch(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+    serializer_class = CategorySerializer
 
 
-class ListCreateProduct(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.GenericAPIView):
-    serializer_class = ProductSerializer
+class ListCreateProduct(generics.ListCreateAPIView):
     queryset = Product.objects.all()
+    serializer_class = ProductSerializer
 
-    # listelemek
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
 
-    # yaratmak istiyorum
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+class ListProductOfCategory(generics.ListAPIView):
+
+    serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        return Product.objects.filter(category_id=pk)
+
+
+
+
+
+
+
