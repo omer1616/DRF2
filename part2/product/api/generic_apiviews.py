@@ -10,7 +10,13 @@ from rest_framework import generics
 # class ListCreateCategory(GenericAPIView):
 #     serializer_class = CategorySerializer
 #     queryset = Category.objects.all()
-#
+
+
+#     def get(self, request, *args, **kwargs):
+#         instance = self.get_queryset()
+#         serializer = self.get_serializer(instance, many=True)
+#         return Response(serializer.data)
+# #
 #     def get(self, request, *args, **kwargs):
 #         instance = self.get_object()
 #         serializer = self.get_serializer(instance)

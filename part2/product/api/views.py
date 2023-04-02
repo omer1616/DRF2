@@ -34,5 +34,17 @@ class ListProductOfCategory(generics.ListAPIView):
 
 
 
+class ListCreateCategoryGen(generics.GenericAPIView):
+    serializer_class = CategorySerializer
+    queryset = Category.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        instance = self.get_queryset()
+        serializer = self.get_serializer(instance, many=True)
+        return Response(serializer.data)
+
+
+
+
 
 
