@@ -9,7 +9,7 @@ class ProductSerializer(serializers.ModelSerializer):
         read_only_fields = ['created_date']
 
 
-class CategorySerializers(serializers.ModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):
     products = ProductSerializer(many=True, read_only=True)
 
     class Meta:
