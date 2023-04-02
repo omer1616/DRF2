@@ -2,13 +2,9 @@ from ..models import Category, Product
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
-from rest_framework.mixins import (ListModelMixin,
-                                   CreateModelMixin,
-                                   RetrieveModelMixin,
-                                   UpdateModelMixin,
-                                   DestroyModelMixin)
+from rest_framework import mixins
 from .serializer import CategorySerializer, ProductSerializer
-from rest_framework.generics import GenericAPIView
+from rest_framework import generics
 
 
 # class ListCreateCategory(GenericAPIView):
@@ -26,7 +22,7 @@ from rest_framework.generics import GenericAPIView
 #         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class ListCreateCategory(ListModelMixin, CreateModelMixin, GenericAPIView):
+class ListCreateCategory(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
 
@@ -39,10 +35,10 @@ class ListCreateCategory(ListModelMixin, CreateModelMixin, GenericAPIView):
         return self.create(request, *args, **kwargs)
 
 
-class RetrieveUpdateDestroy(RetrieveModelMixin,
-                            UpdateModelMixin,
-                            DestroyModelMixin,
-                            GenericAPIView):
+class RetrieveUpdateDestroy(mixins.RetrieveModelMixin,
+                            mixins.UpdateModelMixin,
+                            mixins.DestroyModelMixin,
+                            mixins.GenericAPIView):
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
 
@@ -58,7 +54,8 @@ class RetrieveUpdateDestroy(RetrieveModelMixin,
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
-class ListCreateProduct(ListModelMixin, CreateModelMixin, GenericAPIView):
+
+class ListCreateProduct(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.GenericAPIView):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
 
