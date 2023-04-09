@@ -7,9 +7,21 @@ from .serializer import CategorySerializer, ProductSerializer
 from rest_framework import generics
 
 
-class ListCreateCategory(generics.ListCreateAPIView):
-    queryset = Category.objects.all()
+# class ListCreateCategory(generics.ListCreateAPIView):
+#     queryset = Category.objects.all()
+#     serializer_class = CategorySerializer
+
+class ListCreateCategory(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     serializer_class = CategorySerializer
+    queryset = Category.objects.all()
+
+    # listelemek
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    # yaratmak istiyorum
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
 
 
 class RetrieveUpdateDestroyCategory(generics.RetrieveUpdateDestroyAPIView):
